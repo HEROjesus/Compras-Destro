@@ -1,4 +1,4 @@
-```markdown
+
 # 💻 Aplicação Web de Solicitações de Compras - Destro Casa e Material de Construção
 
 Uma aplicação web desenvolvida para **facilitar e otimizar as solicitações de compras internas** da empresa **Destro Casa e Material de Construção**. Este sistema centraliza todas as informações de pedidos, proporcionando um fluxo mais ágil e eficiente.
@@ -81,4 +81,4 @@ Contribuições são bem-vindas! Caso encontre algum problema ou deseje sugerir 
 
 Para dúvidas ou sugestões, entre em contato:  
 📧 **informatica@destro.com.br**
-```
+
