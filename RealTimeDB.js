@@ -1,9 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, get } from 'firebase/database';
 import 'dotenv/config';
+import { getDatabase, ref, set, get, remove } from 'firebase/database';
 
-// Configuração do Firebase usando variáveis de ambiente
-export const firebaseConfig = {
+const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
     authDomain: process.env.FIREBASE_AUTH_DOMAIN,
     databaseURL: process.env.FIREBASE_DATABASE_URL,
@@ -14,29 +12,8 @@ export const firebaseConfig = {
     measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-// Inicializar o Firebase
-const app = initializeApp(firebaseConfig);
+const dbRef = ref(database), dbSet = set, dbGet = get, dbrem = remove;
 
-// Referência ao banco de dados
-const database = getDatabase(app);
 
-// Teste de escrita no RTDB
-async function RTDB() {
-    try {
-        const testRef = ref(database, 'test');
-        await set(testRef, { message: 'RTDB está funcionando!' });
-        console.log('Dados escritos com sucesso!');
-
-        // Teste de leitura do RTDB
-        const snapshot = await get(testRef);
-        if (snapshot.exists()) {
-            console.log('Dados lidos do RTDB:', snapshot.val());
-        } else {
-            console.log('Nenhum dado encontrado no RTDB.');
-        }
-    } catch (error) {
-        console.error('Erro ao testar RTDB:', error);
-    }
-}
-
-RTDB();
+export { dbRef, dbSet, dbGet, dbrem };
+export default firebaseConfig;
