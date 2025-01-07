@@ -1,65 +1,34 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database';
-import firebaseConfig from './firebaseConfig';
-import dbRef from './RealTimeDB';
+import { getDatabase, ref, set, get, push } from 'firebase/database';
+import firebaseConfig from './RealTimeDB.js';
+import { documentId } from 'firebase/firestore';
 import 'dotenv/config';
 
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const ListaDeCompras = dbRef.ref(database, 'ListaDeCompras');
 
-const inputFieldEl = document.getElementById("input-field")
-const addButtonEl = document.getElementById("add-button")
-const shoppingListEl = document.getElementById("shopping-list")
 
-addButtonEl.addEventListener("click", function() {
-    let inputValue = inputFieldEl.value
-    
-    push(ListaDeCompras, inputValue)
-    
-    clearInputFieldEl()
-})
+// Corrigindo seletores
+const input = documentId('#input-field');
+const button = documentId('#add-button');
 
-onValue(ListaDeCompras, function(snapshot) {
-    if (snapshot.exists()) {
-        let itemsArray = Object.entries(snapshot.val())
-    
-        clearShoppingListEl()
-        
-        for (let i = 0; i < itemsArray.length; i++) {
-            let currentItem = itemsArray[i]
-            let currentItemID = currentItem[0]
-            let currentItemValue = currentItem[1]
-            
-            appendItemToShoppingListEl(currentItem)
-        }    
-    } else {
-        shoppingListEl.innerHTML = "No items here... yet"
+
+async function RTDB() {
+    try {
+        const testRef = ref(database, 'movies');
+        await push(testRef, { masage: `${input.value}` });
+        console.log(`${input.value} adicionado ao RTDB.`);
+        // Teste de leitura do RTDB
+        const snapshot = await get(testRef);
+        if (snapshot.exists()) {
+            console.log('Dados lidos do RTDB:', snapshot.val());
+        } else {
+            console.log('Nenhum dado encontrado no RTDB.');
+        }
+    } catch (error) {
+        console.error('Erro ao testar RTDB:', error);
     }
-})
-
-function clearShoppingListEl() {
-    shoppingListEl.innerHTML = ""
 }
+RTDB();
 
-function clearInputFieldEl() {
-    inputFieldEl.value = ""
-}
-
-function appendItemToShoppingListEl(item) {
-    let itemID = item[0]
-    let itemValue = item[1]
-    
-    let newEl = document.createElement("li")
-    
-    newEl.textContent = itemValue
-    
-    newEl.addEventListener("click", function() {
-        let exactLocationOfItemInDB = ref(database, `shoppingList/${itemID}`)
-        
-        remove(exactLocationOfItemInDB)
-    })
-    
-    shoppingListEl.append(newEl)
-}

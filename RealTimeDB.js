@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, get, remove } from 'firebase/database';
 
 const firebaseConfig = {
@@ -12,8 +13,5 @@ const firebaseConfig = {
     measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-const dbRef = ref(database), dbSet = set, dbGet = get, dbrem = remove;
-
-
-export { dbRef, dbSet, dbGet, dbrem };
 export default firebaseConfig;
+
